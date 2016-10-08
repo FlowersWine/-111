@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Examples</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+	<script src="jquery.min.js"></script>
+</head>
+<body>
+    <input type="text" id="myinput">
+    <input type="button" value="请求数据" id="send"/>
+    <ul id="box"></ul>
+    <script>
+    	
+          $("#send").click(function(){
+            /*
+                （1）jsonp(动态创建script标签) 跟ajax （new XMLHTTPRequest()）没有关系，
+                （2）jQuery 虽然封装在一起， 但要注意没有关系
+            */
+            $.ajax({
+                url:"https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd="+$("#myinput").val(),
+                dataType:'jsonp',
+                jsonp:"cb",
+                success:function(result){
+                    console.log(result);
+                }
+            })
+        })
+
+          //  oninput 只要输入框value值发生改变， 就会调用
+
+
+          $("#myinput").on("input",function(){
+            $("#box").empty();//清空当前dom下的节点。
+            $.ajax({
+                url:"https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd="+$("#myinput").val(),
+                dataType:'jsonp',
+                jsonp:"cb",
+                success:function(result){
+                   $.each(result.s,function(index,item){
+                        var li =$("<li>").html(item);
+                        $("#box").append(li);
+                   })
+                }
+            })
+          })
+
+        // $("#myinput").get(0).oninput = function(){
+        //     console.log(111);
+        // }
+    </script>
+</body>
+</html>
